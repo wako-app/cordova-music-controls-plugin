@@ -45,7 +45,7 @@ public class MusicControlsNotificationKiller extends Service {
      */
     private void keepAwake() {
         if (notification != null) {
-            startForeground(this.NOTIFICATION_ID, notification);
+            startForeground(this.NOTIFICATION_ID, notification.get());
         }
 
         PowerManager pm = (PowerManager)
