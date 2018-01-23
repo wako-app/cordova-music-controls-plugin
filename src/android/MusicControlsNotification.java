@@ -58,7 +58,7 @@ public class MusicControlsNotification {
     private void createNotification() {
         final Notification noti = this.notificationBuilder.build();
         if (killer_service != null) {
-            killer_service.setNotification(noti);
+            killer_service.get().setNotification(noti);
         }
 		this.notificationManager.notify(this.notificationID, noti);
     }
