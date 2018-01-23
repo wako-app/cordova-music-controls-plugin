@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.os.Binder;
 import android.os.PowerManager;
 import android.app.NotificationManager;
+import android.app.Notification;
 import android.content.Intent;
 import android.util.Log;
 
@@ -22,7 +23,7 @@ public class MusicControlsNotificationKiller extends Service {
     // Partial wake lock to prevent the app from going to sleep when locked
     private PowerManager.WakeLock wakeLock;
 
-    private WeakReference<MusicControlsNotification> notification;
+    private WeakReference<Notification> notification;
 
 
 	@Override
@@ -35,8 +36,13 @@ public class MusicControlsNotificationKiller extends Service {
 		return Service.START_STICKY;
 	}
 
-    public void setNotification(MusicControlsNotification n) {
-        notification = new WeakReference<MusicControlsNotification>(n);
+    public void setNotification(Notification n) {
+        if (notification != null) {
+            sleepWell();
+            notification = null;
+        }
+        notification = new WeakReference<Notification>(n);
+        keepAwake();
     }
 
     /**

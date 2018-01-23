@@ -3,6 +3,7 @@ package com.homerours.musiccontrols;
 import org.apache.cordova.CordovaInterface;
 
 
+import java.lang.ref.WeakReference;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -33,6 +34,8 @@ public class MusicControlsNotification {
 	private MusicControlsInfos infos;
 	private Bitmap bitmapCover;
 
+    public WeakReference<MusicControlsNotificationKiller> killer_service;
+
 	// Public Constructor
 	public MusicControlsNotification(Activity cordovaActivity,int id){
 		this.notificationID = id;
@@ -49,24 +52,33 @@ public class MusicControlsNotification {
 		}
 		this.infos = newInfos;
 		this.createBuilder();
-		Notification noti = this.notificationBuilder.build();
-		this.notificationManager.notify(this.notificationID, noti);
+        this.createNotification();
 	}
+
+    private void createNotification() {
+        final Notification noti = this.notificationBuilder.build();
+        if (killer_service != null) {
+            killer_service.setNotification(noti);
+        }
+		this.notificationManager.notify(this.notificationID, noti);
+    }
+
+    public void setKillerService(MusicControlsNotificationKiller s) {
+        this.killer_service = new WeakReference<MusicControlsNotificationKiller>(s);
+    }
 
 	// Toggle the play/pause button
 	public void updateIsPlaying(boolean isPlaying){
 		this.infos.isPlaying=isPlaying;
 		this.createBuilder();
-		Notification noti = this.notificationBuilder.build();
-		this.notificationManager.notify(this.notificationID, noti);
+        this.createNotification();
 	}
 
 	// Toggle the dismissable status
 	public void updateDismissable(boolean dismissable){
 		this.infos.dismissable=dismissable;
 		this.createBuilder();
-		Notification noti = this.notificationBuilder.build();
-		this.notificationManager.notify(this.notificationID, noti);
+        this.createNotification();
 	}
 
 	// Get image from url

@@ -90,7 +90,7 @@ public class MusicControls extends CordovaPlugin {
 		ServiceConnection mConnection = new ServiceConnection() {
 			public void onServiceConnected(ComponentName className, IBinder binder) {
                 final MusicControlsNotificationKiller service = (MusicControlsNotificationKiller) ((KillBinder) binder).service;
-				service.setNotification(my_notification);
+				my_notification.setKillerService(service);
 				service.startService(new Intent(activity, MusicControlsNotificationKiller.class));
 			}
 			public void onServiceDisconnected(ComponentName className) {
