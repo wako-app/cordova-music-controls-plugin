@@ -37,12 +37,15 @@ public class MusicControlsNotificationKiller extends Service {
 	}
 
     public void setNotification(Notification n) {
+        Log.i(TAG, "setNotification");
         if (notification != null) {
             sleepWell();
             notification = null;
         }
-        notification = new WeakReference<Notification>(n);
-        keepAwake();
+        if (n != null) {
+            notification = new WeakReference<Notification>(n);
+            keepAwake();
+        }
     }
 
     /**
@@ -87,6 +90,7 @@ public class MusicControlsNotificationKiller extends Service {
      */
     private void sleepWell() {
         Log.i(TAG, "Stopping WakeLock");
+        stopForeground(true);
         getNotificationManager().cancel(NOTIFICATION_ID);
 
         if (wakeLock != null) {

@@ -260,6 +260,9 @@ public class MusicControlsNotification {
 	}
 
 	public void destroy(){
+        if (this.killer_service !=null) {
+            this.killer_service.get().setNotification(null);
+        }
 		this.notificationManager.cancel(this.notificationID);
 	}
 }
