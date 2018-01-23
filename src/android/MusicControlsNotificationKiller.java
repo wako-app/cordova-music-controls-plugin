@@ -1,5 +1,7 @@
 package com.homerours.musiccontrols;
 
+import java.lang.ref.WeakReference;
+
 import android.app.Service;
 import android.os.IBinder;
 import android.os.Binder;
