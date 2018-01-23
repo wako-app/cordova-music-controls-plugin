@@ -20,6 +20,9 @@ public class MusicControlsNotificationKiller extends Service {
     // Partial wake lock to prevent the app from going to sleep when locked
     private PowerManager.WakeLock wakeLock;
 
+    private WeakReference<MusicControlsNotification> notification;
+
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		this.NOTIFICATION_ID=intent.getIntExtra("notificationID",1);
@@ -30,11 +33,19 @@ public class MusicControlsNotificationKiller extends Service {
 		return Service.START_STICKY;
 	}
 
+    public void setNotification(MusicControlsNotification notification) {
+        notification = new WeakReference<MusicControlsNotification>(notification);
+    }
+
     /**
      * Put the service in a foreground state to prevent app from being killed
      * by the OS.
      */
     private void keepAwake() {
+        if (notification != null) {
+            startForeground(this.NOTIFICATION_ID, notification);
+        }
+
         PowerManager pm = (PowerManager)
                 getSystemService(POWER_SERVICE);
 
@@ -49,10 +60,17 @@ public class MusicControlsNotificationKiller extends Service {
         }
     }
 
+    /**
+     * Shared manager for the notification service.
+     */
+    private NotificationManager getNotificationManager() {
+        return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    }
+
 	@Override
 	public void onCreate() {
-		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		mNM.cancel(NOTIFICATION_ID);
+		/*mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		mNM.cancel(NOTIFICATION_ID);*/
         keepAwake();
 	}
 
@@ -60,8 +78,8 @@ public class MusicControlsNotificationKiller extends Service {
      * Stop background mode.
      */
     private void sleepWell() {
-        Log.i(TAG, "Stopping background mode");
-//        getNotificationManager().cancel(NOTIFICATION_ID);
+        Log.i(TAG, "Stopping WakeLock");
+        getNotificationManager().cancel(NOTIFICATION_ID);
 
         if (wakeLock != null) {
             wakeLock.release();
