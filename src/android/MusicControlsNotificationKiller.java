@@ -35,8 +35,8 @@ public class MusicControlsNotificationKiller extends Service {
 		return Service.START_STICKY;
 	}
 
-    public void setNotification(MusicControlsNotification notification) {
-        notification = new WeakReference<MusicControlsNotification>(notification);
+    public void setNotification(MusicControlsNotification n) {
+        notification = new WeakReference<MusicControlsNotification>(n);
     }
 
     /**
