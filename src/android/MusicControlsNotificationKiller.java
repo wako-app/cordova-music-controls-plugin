@@ -94,8 +94,12 @@ public class MusicControlsNotificationKiller extends Service {
         getNotificationManager().cancel(NOTIFICATION_ID);
 
         if (wakeLock != null) {
-            wakeLock.release();
-            Log.i(TAG, "wakeLock released");
+            if (wakeLock.isHeld()) {
+                wakeLock.release();
+                Log.i(TAG, "wakeLock released");
+            } else {
+                Log.i(TAG, "wakeLock not held");
+            }
             wakeLock = null;
         }
     }
