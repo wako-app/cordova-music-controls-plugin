@@ -68,7 +68,7 @@ public class MusicControlsNotification {
     }
 
     private boolean hasNotification() {
-        return this.killer_service != null && this.killer_service.getNotification() != null;
+        return this.killer_service != null && this.killer_service.get().getNotification() != null;
     }
 
 	// Toggle the play/pause button
