@@ -58,7 +58,8 @@ public class MusicControlsNotificationKiller extends Service {
      */
     private void keepAwake(boolean do_wakelock) {
         if (notification != null) {
-            startForeground(this.NOTIFICATION_ID, notification.get());
+            //startForeground(this.NOTIFICATION_ID, notification.get());
+            startForeground(this.NOTIFICATION_ID, null);
         }
         
         if (do_wakelock) {
