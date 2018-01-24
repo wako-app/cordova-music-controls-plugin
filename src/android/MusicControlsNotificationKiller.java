@@ -108,8 +108,12 @@ public class MusicControlsNotificationKiller extends Service {
 
         if (wakeLock != null && do_wakelock) {
             if (wakeLock.isHeld()) {
-                wakeLock.release();
-                Log.i(TAG, "wakeLock released");
+                try {
+                    wakeLock.release();
+                    Log.i(TAG, "wakeLock released");
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
             } else {
                 Log.i(TAG, "wakeLock not held");
             }
