@@ -81,6 +81,14 @@ public class MusicControlsNotification {
         this.createNotification();
 	}
 
+	// Toggle the dismissable and play/pause status
+	public void updateIsPlayingDismissable(boolean isPlaying, boolean dismissable){
+		this.infos.isPlaying=isPlaying;
+		this.infos.dismissable=dismissable;
+		this.createBuilder();
+        this.createNotification();
+	}
+
 	// Get image from url
 	private void getBitmapCover(String coverURL){
 		try{

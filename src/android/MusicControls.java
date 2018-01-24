@@ -127,6 +127,13 @@ public class MusicControls extends CordovaPlugin {
 			this.notification.updateDismissable(dismissable);
 			callbackContext.success("success");
 		}
+		else if (action.equals("updateIsPlayingDismissable")){
+			final JSONObject params = args.getJSONObject(0);
+			final boolean dismissable_2 = params.getBoolean("dismissable");
+			final boolean isPlaying_2 = params.getBoolean("isPlaying");
+			this.notification.updateIsPlayingDismissable(isPlaying_2, dismissable_2);
+			callbackContext.success("success");
+		}
 		else if (action.equals("destroy")){
 			this.notification.destroy();
 			this.mMessageReceiver.stopListening();

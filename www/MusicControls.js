@@ -64,6 +64,16 @@ var musicControls = {
     );
   },
 
+  updateIsPlayingDismissable: function(isPlaying, dismissable, successCallback, errorCallback) {
+    cordova.exec(
+      successCallback,
+      errorCallback,
+      "MusicControls",
+      "updateIsPlayingDismissable",
+      [{ dismissable: dismissable, isPlaying: isPlaying }]
+    );
+  },
+
   destroy: function(successCallback, errorCallback) {
     cordova.exec(
       successCallback,
