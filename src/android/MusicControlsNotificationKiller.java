@@ -39,35 +39,41 @@ public class MusicControlsNotificationKiller extends Service {
     public void setNotification(Notification n) {
         Log.i(TAG, "setNotification");
         if (notification != null) {
-            sleepWell();
+            sleepWell(n == null);
             notification = null;
         }
         if (n != null) {
             notification = new WeakReference<Notification>(n);
-            keepAwake();
+            keepAwake(wakeLock == null);
         }
+    }
+
+    public Notification getNotification() {
+        return notification != null ? notification.get() : null;
     }
 
     /**
      * Put the service in a foreground state to prevent app from being killed
      * by the OS.
      */
-    private void keepAwake() {
+    private void keepAwake(boolean do_wakelock) {
         if (notification != null) {
             startForeground(this.NOTIFICATION_ID, notification.get());
         }
+        
+        if (do_wakelock) {
+            PowerManager pm = (PowerManager)
+                    getSystemService(POWER_SERVICE);
 
-        PowerManager pm = (PowerManager)
-                getSystemService(POWER_SERVICE);
+            wakeLock = pm.newWakeLock(PARTIAL_WAKE_LOCK, TAG);
 
-        wakeLock = pm.newWakeLock(PARTIAL_WAKE_LOCK, TAG);
-
-        Log.i(TAG, "Acquiring LOCK");
-        wakeLock.acquire();
-        if (wakeLock.isHeld()) {
-            Log.i(TAG, "wakeLock acquired");
-        } else {
-            Log.e(TAG, "wakeLock not acquired yet");
+            Log.i(TAG, "Acquiring LOCK");
+            wakeLock.acquire();
+            if (wakeLock.isHeld()) {
+                Log.i(TAG, "wakeLock acquired");
+            } else {
+                Log.e(TAG, "wakeLock not acquired yet");
+            }
         }
     }
 
@@ -82,18 +88,18 @@ public class MusicControlsNotificationKiller extends Service {
 	public void onCreate() {
 		/*mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		mNM.cancel(NOTIFICATION_ID);*/
-        keepAwake();
+        keepAwake(true);
 	}
 
     /**
      * Stop background mode.
      */
-    private void sleepWell() {
+    private void sleepWell(boolean do_wakelock) {
         Log.i(TAG, "Stopping WakeLock");
         stopForeground(true);
         getNotificationManager().cancel(NOTIFICATION_ID);
 
-        if (wakeLock != null) {
+        if (wakeLock != null && do_wakelock) {
             if (wakeLock.isHeld()) {
                 wakeLock.release();
                 Log.i(TAG, "wakeLock released");
@@ -107,7 +113,6 @@ public class MusicControlsNotificationKiller extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        sleepWell();
+        sleepWell(true);
     }
-
 }

@@ -67,15 +67,25 @@ public class MusicControlsNotification {
         this.killer_service = new WeakReference<MusicControlsNotificationKiller>(s);
     }
 
+    private boolean hasNotification() {
+        return this.killer_service != null && this.killer_service.getNotification() != null;
+    }
+
 	// Toggle the play/pause button
-	public void updateIsPlaying(boolean isPlaying){
+	public void updateIsPlaying(boolean isPlaying) {
+        if (isPlaying == this.infos.isPlaying && hasNotification()) {
+            return;  // Not recreate the notification with the same data
+        }
 		this.infos.isPlaying=isPlaying;
 		this.createBuilder();
         this.createNotification();
 	}
 
 	// Toggle the dismissable status
-	public void updateDismissable(boolean dismissable){
+	public void updateDismissable(boolean dismissable) {
+        if (dismissable == this.infos.dismissable && hasNotification()) {
+            return;  // Not recreate the notification with the same data
+        }
 		this.infos.dismissable=dismissable;
 		this.createBuilder();
         this.createNotification();
@@ -83,6 +93,9 @@ public class MusicControlsNotification {
 
 	// Toggle the dismissable and play/pause status
 	public void updateIsPlayingDismissable(boolean isPlaying, boolean dismissable){
+        if (dismissable == this.infos.dismissable && isPlaying == this.infos.isPlaying && hasNotification()) {
+            return;  // Not recreate the notification with the same data
+        }
 		this.infos.isPlaying=isPlaying;
 		this.infos.dismissable=dismissable;
 		this.createBuilder();
