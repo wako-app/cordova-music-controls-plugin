@@ -39,7 +39,9 @@ public class MusicControlsNotificationKiller extends Service {
     public void setNotification(Notification n) {
         Log.i(TAG, "setNotification");
         if (notification != null) {
-            sleepWell(n == null);
+            if (n == null) {
+                sleepWell(n == null);
+            }
             notification = null;
         }
         if (n != null) {
@@ -58,8 +60,8 @@ public class MusicControlsNotificationKiller extends Service {
      */
     private void keepAwake(boolean do_wakelock) {
         if (notification != null) {
-            //startForeground(this.NOTIFICATION_ID, notification.get());
-            startForeground(this.NOTIFICATION_ID, null);
+            Log.i(TAG, "Starting ForegroundService");
+            startForeground(this.NOTIFICATION_ID, notification.get());
         }
         
         if (do_wakelock) {
@@ -87,9 +89,9 @@ public class MusicControlsNotificationKiller extends Service {
 
 	@Override
 	public void onCreate() {
-		/*mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		mNM.cancel(NOTIFICATION_ID);*/
-        keepAwake(true);
+        Log.i(TAG, "onCreate");
+		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		mNM.cancel(NOTIFICATION_ID);
 	}
 
     /**
@@ -97,8 +99,12 @@ public class MusicControlsNotificationKiller extends Service {
      */
     private void sleepWell(boolean do_wakelock) {
         Log.i(TAG, "Stopping WakeLock");
-        stopForeground(true);
-        getNotificationManager().cancel(NOTIFICATION_ID);
+        if (notification != null) {
+            Log.i(TAG, "Stopping ForegroundService");
+            stopForeground(true);
+            Log.i(TAG, "ForegroundService stopped");
+        }
+        mNM.cancel(NOTIFICATION_ID);
 
         if (wakeLock != null && do_wakelock) {
             if (wakeLock.isHeld()) {
