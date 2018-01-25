@@ -27,6 +27,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 
 public class MusicControlsNotification {
+    private static final String TAG = "MusicControlsNotification";
+
 	private Activity cordovaActivity;
 	private NotificationManager notificationManager;
 	private Notification.Builder notificationBuilder;
@@ -281,10 +283,12 @@ public class MusicControlsNotification {
 	}
 
 	public void destroy(){
+        Log.i(TAG, "Destroying notification");
         if (this.killer_service !=null) {
             this.killer_service.get().setNotification(null);
         }
 		this.notificationManager.cancel(this.notificationID);
+        Log.i(TAG, "Notification destroyed");
 	}
 }
 

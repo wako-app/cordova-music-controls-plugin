@@ -26,6 +26,8 @@ import android.content.BroadcastReceiver;
 import android.media.AudioManager;
 
 public class MusicControls extends CordovaPlugin {
+    private static final String TAG = "MusicControls";
+
 	private MusicControlsBroadcastReceiver mMessageReceiver;
 	private MusicControlsNotification notification;
 	private final int notificationID=7824;
@@ -89,9 +91,11 @@ public class MusicControls extends CordovaPlugin {
 		// Notification Killer
 		ServiceConnection mConnection = new ServiceConnection() {
 			public void onServiceConnected(ComponentName className, IBinder binder) {
+                Log.i(TAG, "onServiceConnected");
                 final MusicControlsNotificationKiller service = (MusicControlsNotificationKiller) ((KillBinder) binder).service;
 				my_notification.setKillerService(service);
 				service.startService(new Intent(activity, MusicControlsNotificationKiller.class));
+                Log.i(TAG, "service Started");
 			}
 			public void onServiceDisconnected(ComponentName className) {
 			}
