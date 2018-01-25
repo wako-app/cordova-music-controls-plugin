@@ -25,6 +25,8 @@ public class MusicControlsNotificationKiller extends Service {
 
     private WeakReference<Notification> notification;
 
+    private boolean foregroundStarted = false;
+
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -41,7 +43,7 @@ public class MusicControlsNotificationKiller extends Service {
         Log.i(TAG, "setNotification");
         if (notification != null) {
             if (n == null) {
-                sleepWell(n == null);
+                sleepWell(true);
             }
             notification = null;
         }
@@ -60,9 +62,10 @@ public class MusicControlsNotificationKiller extends Service {
      * by the OS.
      */
     private void keepAwake(boolean do_wakelock) {
-        if (notification != null) {
+        if (notification != null && notification.get() != null && !foregroundStarted) {
             Log.i(TAG, "Starting ForegroundService");
             startForeground(this.NOTIFICATION_ID, notification.get());
+            foregroundStarted = true;
         }
         
         if (do_wakelock) {
@@ -100,9 +103,10 @@ public class MusicControlsNotificationKiller extends Service {
      */
     private void sleepWell(boolean do_wakelock) {
         Log.i(TAG, "Stopping WakeLock");
-        if (notification != null) {
+        if (foregroundStarted) {
             Log.i(TAG, "Stopping ForegroundService");
             stopForeground(true);
+            foregroundStarted = false;
             Log.i(TAG, "ForegroundService stopped");
         }
         mNM.cancel(NOTIFICATION_ID);
