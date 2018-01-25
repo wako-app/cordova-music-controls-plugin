@@ -32,11 +32,11 @@ public class MusicControlsNotificationKiller extends Service {
 		return mBinder;
 	}
 
-/*    @Override
+    @Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		return Service.START_STICKY;
+		return Service.START_NOT_STICKY;
 	}
-*/
+
     public void setNotification(Notification n) {
         Log.i(TAG, "setNotification");
         if (notification != null) {
