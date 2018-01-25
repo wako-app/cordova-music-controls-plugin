@@ -35,6 +35,8 @@ public class MusicControls extends CordovaPlugin {
 	private PendingIntent mediaButtonPendingIntent;
 	private boolean mediaButtonAccess=true;
 
+    private ServiceConnection mConnection;
+
 
 	private void registerBroadcaster(MusicControlsBroadcastReceiver mMessageReceiver){
 		final Context context = this.cordova.getActivity().getApplicationContext();
@@ -89,7 +91,7 @@ public class MusicControls extends CordovaPlugin {
 		}
 
 		// Notification Killer
-		ServiceConnection mConnection = new ServiceConnection() {
+		mConnection = new ServiceConnection() {
 			public void onServiceConnected(ComponentName className, IBinder binder) {
                 Log.i(TAG, "onServiceConnected");
                 final MusicControlsNotificationKiller service = (MusicControlsNotificationKiller) ((KillBinder) binder).service;
@@ -159,6 +161,12 @@ public class MusicControls extends CordovaPlugin {
 		this.notification.destroy();
 		this.mMessageReceiver.stopListening();
 		this.unregisterMediaButtonEvent();
+        if (mConnection != null) {
+		    final Activity activity = this.cordova.getActivity();
+    		Intent stopServiceIntent = new Intent(activity, MusicControlsNotificationKiller.class);
+            activity.unbindService(mConnection);
+            activity.stopService(stopServiceIntent);
+        }
 		super.onDestroy();
 	}
 
