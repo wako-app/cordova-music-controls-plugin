@@ -26,7 +26,7 @@ import android.content.BroadcastReceiver;
 import android.media.AudioManager;
 
 public class MusicControls extends CordovaPlugin {
-    private static final String TAG = "MusicControls";
+	private static final String TAG = "MusicControls";
 
 	private MusicControlsBroadcastReceiver mMessageReceiver;
 	private MusicControlsNotification notification;
@@ -35,7 +35,7 @@ public class MusicControls extends CordovaPlugin {
 	private PendingIntent mediaButtonPendingIntent;
 	private boolean mediaButtonAccess=true;
 
-    private ServiceConnection mConnection;
+	private ServiceConnection mConnection;
 
 
 	private void registerBroadcaster(MusicControlsBroadcastReceiver mMessageReceiver){
@@ -75,7 +75,7 @@ public class MusicControls extends CordovaPlugin {
 		final Context context=activity.getApplicationContext();
 
 		this.notification = new MusicControlsNotification(activity,this.notificationID);
-        final MusicControlsNotification my_notification = this.notification;
+		final MusicControlsNotification my_notification = this.notification;
 		this.mMessageReceiver = new MusicControlsBroadcastReceiver(this);
 		this.registerBroadcaster(mMessageReceiver);
 
@@ -93,11 +93,11 @@ public class MusicControls extends CordovaPlugin {
 		// Notification Killer
 		mConnection = new ServiceConnection() {
 			public void onServiceConnected(ComponentName className, IBinder binder) {
-                Log.i(TAG, "onServiceConnected");
-                final MusicControlsNotificationKiller service = (MusicControlsNotificationKiller) ((KillBinder) binder).service;
+				Log.i(TAG, "onServiceConnected");
+				final MusicControlsNotificationKiller service = (MusicControlsNotificationKiller) ((KillBinder) binder).service;
 				my_notification.setKillerService(service);
 				service.startService(new Intent(activity, MusicControlsNotificationKiller.class));
-                Log.i(TAG, "service Started");
+				Log.i(TAG, "service Started");
 			}
 			public void onServiceDisconnected(ComponentName className) {
 			}
@@ -161,12 +161,12 @@ public class MusicControls extends CordovaPlugin {
 		this.notification.destroy();
 		this.mMessageReceiver.stopListening();
 		this.unregisterMediaButtonEvent();
-        if (mConnection != null) {
-		    final Activity activity = this.cordova.getActivity();
-    		Intent stopServiceIntent = new Intent(activity, MusicControlsNotificationKiller.class);
-            activity.unbindService(mConnection);
-            activity.stopService(stopServiceIntent);
-        }
+		if (mConnection != null) {
+			final Activity activity = this.cordova.getActivity();
+			Intent stopServiceIntent = new Intent(activity, MusicControlsNotificationKiller.class);
+			activity.unbindService(mConnection);
+			activity.stopService(stopServiceIntent);
+		}
 		super.onDestroy();
 	}
 

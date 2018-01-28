@@ -26,10 +26,8 @@
 				<param name="android-package" value="com.homerours.musiccontrols.MusicControls"/>
 			</feature>
 		</config-file>
-
-		<config-file target="AndroidManifest.xml" parent="/*">
+		<config-file target="AndroidManifest.xml" parent="/manifest">
 			<uses-permission android:name="android.permission.WAKE_LOCK" />
-			<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 		</config-file>
 
 		<config-file target="AndroidManifest.xml" parent="/manifest/application">

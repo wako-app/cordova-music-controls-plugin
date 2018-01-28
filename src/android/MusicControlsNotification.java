@@ -27,7 +27,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 
 public class MusicControlsNotification {
-    private static final String TAG = "MusicControlsNotification";
+	private static final String TAG = "MusicControlsNotification";
 
 	private Activity cordovaActivity;
 	private NotificationManager notificationManager;
@@ -36,7 +36,7 @@ public class MusicControlsNotification {
 	private MusicControlsInfos infos;
 	private Bitmap bitmapCover;
 
-    public WeakReference<MusicControlsNotificationKiller> killer_service;
+	public WeakReference<MusicControlsNotificationKiller> killer_service;
 
 	// Public Constructor
 	public MusicControlsNotification(Activity cordovaActivity,int id){
@@ -48,60 +48,60 @@ public class MusicControlsNotification {
 
 	// Show or update notification
 	public void updateNotification(MusicControlsInfos newInfos){
-		// Check if the cover has changed	
+		// Check if the cover has changed
 		if (!newInfos.cover.isEmpty() && (this.infos == null || !newInfos.cover.equals(this.infos.cover))){
 			this.getBitmapCover(newInfos.cover);
 		}
 		this.infos = newInfos;
 		this.createBuilder();
-        this.createNotification();
+		this.createNotification();
 	}
 
-    private void createNotification() {
-        final Notification noti = this.notificationBuilder.build();
-        if (killer_service != null) {
-            killer_service.get().setNotification(noti);
-        }
+	private void createNotification() {
+		final Notification noti = this.notificationBuilder.build();
+		if (killer_service != null) {
+			killer_service.get().setNotification(noti);
+		}
 		this.notificationManager.notify(this.notificationID, noti);
-    }
+	}
 
-    public void setKillerService(MusicControlsNotificationKiller s) {
-        this.killer_service = new WeakReference<MusicControlsNotificationKiller>(s);
-    }
+	public void setKillerService(MusicControlsNotificationKiller s) {
+		this.killer_service = new WeakReference<MusicControlsNotificationKiller>(s);
+	}
 
-    private boolean hasNotification() {
-        return this.killer_service != null && this.killer_service.get().getNotification() != null;
-    }
+	private boolean hasNotification() {
+		return this.killer_service != null && this.killer_service.get().getNotification() != null;
+	}
 
 	// Toggle the play/pause button
 	public void updateIsPlaying(boolean isPlaying) {
-        if (isPlaying == this.infos.isPlaying && hasNotification()) {
-            return;  // Not recreate the notification with the same data
-        }
+		if (isPlaying == this.infos.isPlaying && hasNotification()) {
+			return;  // Not recreate the notification with the same data
+		}
 		this.infos.isPlaying=isPlaying;
 		this.createBuilder();
-        this.createNotification();
+		this.createNotification();
 	}
 
 	// Toggle the dismissable status
 	public void updateDismissable(boolean dismissable) {
-        if (dismissable == this.infos.dismissable && hasNotification()) {
-            return;  // Not recreate the notification with the same data
-        }
+		if (dismissable == this.infos.dismissable && hasNotification()) {
+			return;  // Not recreate the notification with the same data
+		}
 		this.infos.dismissable=dismissable;
 		this.createBuilder();
-        this.createNotification();
+		this.createNotification();
 	}
 
 	// Toggle the dismissable and play/pause status
 	public void updateIsPlayingDismissable(boolean isPlaying, boolean dismissable){
-        if (dismissable == this.infos.dismissable && isPlaying == this.infos.isPlaying && hasNotification()) {
-            return;  // Not recreate the notification with the same data
-        }
+		if (dismissable == this.infos.dismissable && isPlaying == this.infos.isPlaying && hasNotification()) {
+			return;  // Not recreate the notification with the same data
+		}
 		this.infos.isPlaying=isPlaying;
 		this.infos.dismissable=dismissable;
 		this.createBuilder();
-        this.createNotification();
+		this.createNotification();
 	}
 
 	// Get image from url
@@ -283,12 +283,12 @@ public class MusicControlsNotification {
 	}
 
 	public void destroy(){
-        Log.i(TAG, "Destroying notification");
-        if (this.killer_service !=null) {
-            this.killer_service.get().setNotification(null);
-        }
+		Log.i(TAG, "Destroying notification");
+		if (this.killer_service !=null) {
+			this.killer_service.get().setNotification(null);
+		}
 		this.notificationManager.cancel(this.notificationID);
-        Log.i(TAG, "Notification destroyed");
+		Log.i(TAG, "Notification destroyed");
 	}
 }
 
