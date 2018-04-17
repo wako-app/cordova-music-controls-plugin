@@ -26,6 +26,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
+import android.app.NotificationChannel;
+
 public class MusicControlsNotification {
 	private static final String TAG = "MusicControlsNotification";
 
@@ -35,15 +37,35 @@ public class MusicControlsNotification {
 	private int notificationID;
 	private MusicControlsInfos infos;
 	private Bitmap bitmapCover;
+	private String CHANNEL_ID;
 
 	public WeakReference<MusicControlsNotificationKiller> killer_service;
 
 	// Public Constructor
 	public MusicControlsNotification(Activity cordovaActivity,int id){
+		this.CHANNEL_ID ="cordova-music-channel-id";
 		this.notificationID = id;
 		this.cordovaActivity = cordovaActivity;
 		Context context = cordovaActivity;
 		this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+		// use channelid for Oreo and higher
+		if (Build.VERSION.SDK_INT >= 26) {
+			// The user-visible name of the channel.
+			CharSequence name = "cordova-music-controls-plugin";
+			// The user-visible description of the channel.
+			String description = "cordova-music-controls-plugin notification";
+
+			int importance = NotificationManager.IMPORTANCE_LOW;
+
+			NotificationChannel mChannel = new NotificationChannel(this.CHANNEL_ID, name,importance);
+
+			// Configure the notification channel.
+			mChannel.setDescription(description);
+
+			this.notificationManager.createNotificationChannel(mChannel);
+    }
+
 	}
 
 	// Show or update notification
@@ -164,6 +186,11 @@ public class MusicControlsNotification {
 		Context context = cordovaActivity;
 		Notification.Builder builder = new Notification.Builder(context);
 
+		// use channelid for Oreo and higher
+		if (Build.VERSION.SDK_INT >= 26) {
+			builder.setChannelId(this.CHANNEL_ID);
+		}
+
 		//Configure builder
 		builder.setContentTitle(infos.track);
 		if (!infos.artist.isEmpty()){
@@ -183,6 +210,7 @@ public class MusicControlsNotification {
 		if (!infos.ticker.isEmpty()){
 			builder.setTicker(infos.ticker);
 		}
+		
 		builder.setPriority(Notification.PRIORITY_MAX);
 
 		//If 5.0 >= set the controls to be visible on lockscreen
@@ -291,4 +319,3 @@ public class MusicControlsNotification {
 		Log.i(TAG, "Notification destroyed");
 	}
 }
-
