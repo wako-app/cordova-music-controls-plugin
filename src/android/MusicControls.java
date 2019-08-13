@@ -49,6 +49,7 @@ public class MusicControls extends CordovaPlugin {
 	private AudioManager mAudioManager;
 	private PendingIntent mediaButtonPendingIntent;
 	private boolean mediaButtonAccess=true;
+	private ServiceConnection mConnection;
 
   	private Activity cordovaActivity;
 
