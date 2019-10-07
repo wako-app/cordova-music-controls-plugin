@@ -4,7 +4,10 @@
   "description": "Music controls for Cordova apps",
   "cordova": {
     "id": "cordova-plugin-music-controls",
-    "platforms": ["android", "windows", "ios"]
+    "platforms": [
+      "android",
+      "ios"
+    ]
   },
   "repository": {
     "type": "git",
@@ -33,6 +36,5 @@
   "bugs": {
     "url": "https://github.com/homerours/cordova-music-controls-plugin/issues"
   },
-  "homepage":
-    "https://github.com/homerours/cordova-music-controls-plugin#readme"
+  "homepage": "https://github.com/homerours/cordova-music-controls-plugin#readme"
 }
