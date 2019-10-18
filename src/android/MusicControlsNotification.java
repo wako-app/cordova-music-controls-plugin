@@ -1,5 +1,8 @@
 package com.homerours.musiccontrols;
 
+import android.app.Notification.MediaStyle;
+import android.media.session.MediaSession;
+import android.support.v4.media.session.MediaSessionCompat;
 import org.apache.cordova.CordovaInterface;
 
 
@@ -38,13 +41,15 @@ public class MusicControlsNotification {
 	private MusicControlsInfos infos;
 	private Bitmap bitmapCover;
 	private String CHANNEL_ID;
+	private MediaSessionCompat mediaSessionCompat;
 
 	public WeakReference<MusicControlsNotificationKiller> killer_service;
 
 	// Public Constructor
-	public MusicControlsNotification(Activity cordovaActivity,int id){
+	public MusicControlsNotification(Activity cordovaActivity,int id, MediaSessionCompat mediaSession){
 		this.CHANNEL_ID ="cordova-music-channel-id";
 		this.notificationID = id;
+		this.mediaSessionCompat = mediaSession;
 		this.cordovaActivity = cordovaActivity;
 		Context context = cordovaActivity;
 		this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -291,7 +296,11 @@ public class MusicControlsNotification {
 			for (int i = 0; i < nbControls; ++i) {
 				args[i] = i;
 			}
-			builder.setStyle(new Notification.MediaStyle().setShowActionsInCompactView(args));
+      Notification.MediaStyle style = new MediaStyle();
+      style.setShowActionsInCompactView(args);
+      MediaSession session = (MediaSession) this.mediaSessionCompat.getMediaSession();
+      style.setMediaSession(session.getSessionToken());
+			builder.setStyle(style);
 		}
 		this.notificationBuilder = builder;
 	}

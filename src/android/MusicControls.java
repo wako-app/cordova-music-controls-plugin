@@ -98,14 +98,15 @@ public class MusicControls extends CordovaPlugin {
 
     		this.cordovaActivity = activity;
 
-		this.notification = new MusicControlsNotification(activity,this.notificationID);
+		this.mediaSessionCompat = new MediaSessionCompat(context, "cordova-music-controls-media-session", null, this.mediaButtonPendingIntent);
+		this.mediaSessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+
+		this.notification = new MusicControlsNotification(activity,this.notificationID, mediaSessionCompat);
 		final MusicControlsNotification my_notification = this.notification;
 		this.mMessageReceiver = new MusicControlsBroadcastReceiver(this);
 		this.registerBroadcaster(mMessageReceiver);
 
-		
-		this.mediaSessionCompat = new MediaSessionCompat(context, "cordova-music-controls-media-session", null, this.mediaButtonPendingIntent);
-		this.mediaSessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+
 
 
 		setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
