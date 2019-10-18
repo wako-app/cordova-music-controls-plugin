@@ -43,11 +43,22 @@
 		<source-file src="src/android/MusicControlsNotificationKiller.java" target-dir="src/com/homerours/musiccontrols" />
 		<source-file src="src/android/MusicControlsInfos.java" target-dir="src/com/homerours/musiccontrols" />
 		<source-file src="src/android/KillBinder.java" target-dir="src/com/homerours/musiccontrols" />
+
+		<source-file src="src/android/res/media_play.xml" target-dir="res/drawable" />
+		<source-file src="src/android/res/media_pause.xml" target-dir="res/drawable" />
+		<source-file src="src/android/res/media_next.xml" target-dir="res/drawable" />
+		<source-file src="src/android/res/media_prev.xml" target-dir="res/drawable" />
+
         <framework src="com.android.support:support-v4:26.+"/>
         <framework src="com.android.support:support-media-compat:27.+"/>
 	</platform>
 
 	<platform name="ios">
+		 <edit-config file="*-Info.plist" mode="merge" target="UIBackgroundModes">
+            <array>
+                <string>audio</string>
+            </array>
+        </edit-config>
 		<config-file target="config.xml" parent="/*">
 			<feature name="MusicControls">
 				<param name="ios-package" value="MusicControls" />
