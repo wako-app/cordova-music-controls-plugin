@@ -86,8 +86,17 @@ public class MusicControlsNotification {
 
 	private void createNotification() {
 		final Notification noti = this.notificationBuilder.build();
-		if (killer_service != null) {
-			killer_service.get().setNotification(noti);
+    noti.defaults |= Notification.DEFAULT_SOUND;
+    noti.defaults |= Notification.DEFAULT_VIBRATE;
+    noti.defaults |= Notification.DEFAULT_LIGHTS;
+    noti.flags |= Notification.FLAG_AUTO_CANCEL;
+    MusicControlsNotificationKiller killer = killer_service.get();
+		if (killer != null) {
+      if (this.infos.dismissable) {
+        killer.startForeground(0,null);
+      } else {
+        killer.setNotification(noti);
+      }
 		}
 		this.notificationManager.notify(this.notificationID, noti);
 	}
