@@ -1,6 +1,8 @@
 # Cordova Music Controls Plugin
 
-This is a fork with working Background playing on Android
+This is a fork with working Background playing on Android, Color etc.
+
+Pull Requests are welcome
 
 <img src='https://imgur.com/fh3ACOq.png' width='564' height='342'>
 
