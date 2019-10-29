@@ -27,6 +27,8 @@
 			</feature>
 		</config-file>
 		<config-file target="AndroidManifest.xml" parent="/manifest">
+			<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/> 
+			<uses-permission android:name="android.permission.BLUETOOTH"/>
 			<uses-permission android:name="android.permission.WAKE_LOCK" />
 			<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 			<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
